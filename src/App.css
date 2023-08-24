@@ -16,7 +16,7 @@ form {
   padding-block: 1rem;
 }
 
-input {
+input, select {
   padding: 0.3rem;
   margin-inline: 0.5rem;
 }

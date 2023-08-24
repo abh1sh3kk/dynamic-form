@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Input from "./Input";
 
 function App() {
     const [errorMsg, setErrorMsg] = useState("");
@@ -10,33 +11,8 @@ function App() {
         gender: "male",
         age: 32,
         phoneNumber: "+977-98xxxxxxxx",
+        country: "Nepal",
     });
-
-    const handleChange = (e, validation) => {
-        const { maxlen, minlen, maxval, minval } = validation;
-
-        // console.log(formData[e.target.name]);
-        if (formData[e.target.name].length > maxlen) {
-            console.log(`Max characters allowed: ${maxlen}`);
-        }
-
-        if (formData[e.target.name].length < minlen) {
-            console.log(`Min characters allowed: ${minlen}`);
-        }
-
-        if (formData[e.target.name] < minval) {
-            console.log(`Min. age allowed: ${minval}`);
-        }
-
-        if (formData[e.target.name] > maxval) {
-            console.log(`Max age allowed: ${maxval}`);
-        }
-
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
 
     const schema = [
         {
@@ -61,12 +37,31 @@ function App() {
                 minlen: 3,
             },
         },
+        {
+            type: "select",
+            title: "Country",
+            placeholder: "Choose your country",
+            list: [
+                "Afghanistan",
+                "Bangladesh",
+                "Bhutan",
+                "India",
+                "Iran",
+                "Maldives",
+                "Nepal",
+                "Pakistan",
+                "Sri Lanka",
+            ],
+            label: "Choose your country",
+            name: "country",
+        },
         // {
-        //     type: "radio",
-        //     title: "Gender",
-        //     placeholder: "",
-        //     label: "Choose your gender",
-        //     name: "gender",
+        //     type: "select",
+        //     title: "Favorite",
+        //     placeholder: "Choose your favorite fruit",
+        //     list: ["Apple", "Mango", "Banana"],
+        //     label: "Choose your favorite fruit",
+        //     name: "fruits",
         // },
         {
             type: "number",
@@ -85,6 +80,10 @@ function App() {
             placeholder: "Phone Number",
             label: "Enter your phone number",
             name: "phoneNumber",
+            validation: {
+                maxlen: 20,
+                minval: 5,
+            },
         },
     ];
 
@@ -97,7 +96,10 @@ function App() {
                     return (
                         <label key={index}>
                             <span>{obj.label}</span>
-                            <input
+
+                            <Input formData={formData} schema={obj} setFormData={setFormData} />
+
+                            {/* <input
                                 type={obj.type}
                                 placeholder={obj.placeholder}
                                 value={formData[obj.name]}
@@ -105,7 +107,7 @@ function App() {
                                     handleChange(e, obj.validation);
                                 }}
                                 name={obj.name}
-                            />
+                            /> */}
                         </label>
                     );
                 })}
