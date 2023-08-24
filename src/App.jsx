@@ -3,8 +3,6 @@ import "./App.css";
 import Input from "./Input";
 
 function App() {
-    const [errorMsg, setErrorMsg] = useState("");
-
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
@@ -96,25 +94,13 @@ function App() {
                     return (
                         <label key={index}>
                             <span>{obj.label}</span>
-
                             <Input formData={formData} schema={obj} setFormData={setFormData} />
-
-                            {/* <input
-                                type={obj.type}
-                                placeholder={obj.placeholder}
-                                value={formData[obj.name]}
-                                onChange={(e) => {
-                                    handleChange(e, obj.validation);
-                                }}
-                                name={obj.name}
-                            /> */}
                         </label>
                     );
                 })}
                 <button type="submit">Submit</button>
             </form>
             <hr />
-            <span>{errorMsg}</span>
 
             {schema.map((obj, index) => {
                 return (

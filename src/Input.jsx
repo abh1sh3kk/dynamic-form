@@ -1,7 +1,7 @@
 import React from "react";
 
 function Input({ schema, formData, setFormData }) {
-    const handleChange = (e, validation, setFormData, formData) => {
+    const validate = (e, validation) => {
         const { maxlen, minlen, maxval, minval } = validation;
 
         if (formData[e.target.name].length > maxlen) {
@@ -19,7 +19,9 @@ function Input({ schema, formData, setFormData }) {
         if (formData[e.target.name] > maxval) {
             console.log(`Max age allowed: ${maxval}`);
         }
+    };
 
+    const handleChange = (e, formData, setFormData) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
@@ -56,7 +58,8 @@ function Input({ schema, formData, setFormData }) {
             placeholder={schema.placeholder}
             value={formData[schema.name]}
             onChange={(e) => {
-                handleChange(e, schema.validation, setFormData, formData);
+                validate(e, schema.validation);
+                handleChange(e, formData, setFormData);
             }}
             autoComplete="off"
             name={schema.name}
