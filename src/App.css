@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+  color: rgb(53, 53, 53);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding-block: 1rem;
+}
+
+input {
+  padding: 0.3rem;
+  margin-inline: 0.5rem;
+  
+}
+
+.title {
+  font-weight: 600;
+}
+
+
