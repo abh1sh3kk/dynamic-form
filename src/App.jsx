@@ -1,63 +1,73 @@
 import { useState } from "react";
 import "./App.css";
+import FormField from "./FormField";
 
 function App() {
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
-        age: 33,
+        age: 32,
     });
 
     const handleChange = (e) => {
-      console.log(e.target.name)
-      console.log(e.target.name.value)
-      set
-        // setFormData({
-        //     ...formData,
-        //     [e.target.name]: e.target.name.value,
-        // });
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
+
+    const schema = [
+        {
+            type: "text",
+            placeholder: "First Name",
+            label: "Enter your first name",
+            name: "fname",
+        },
+        {
+            type: "text",
+            placeholder: "Last Name",
+            label: "Enter your last name",
+            name: "lname",
+        },
+        {
+            type: "number",
+            placeholder: "Age",
+            label: "Enter your age",
+            name: "age",
+        },
+    ];
 
     return (
         <>
-        <h2>hi</h2>
             <h2>
                 {formData.fname} {formData.lname}
             </h2>
+            <h3>Age: {formData.age}</h3>
+
             <hr />
+
             <form>
-                <label>
-                    <span>Enter your first name</span>
-                    <input
-                        type="text"
-                        placeholder="Enter your first name"
-                        value={formData.fname}
-                        onChange={handleChange}
-                        name="fname"
-                    />
-                </label>
-                <br />
-                <label>
-                    <span>Enter your last name</span>
-                    <input
-                        type="text"
-                        placeholder="Enter your last name"
-                        value={formData.lname}
-                        onChange={handleChange}
-                        name="lname"
-                    />
-                </label>
-                <br />
-                <label>
-                    <span>Enter your age</span>
-                    <input
-                        type="number"
-                        placeholder="Enter your age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        name="age"
-                    />
-                </label>
+
+                {schema.map((obj, index) => {
+
+                    return (
+                        <section key={index}>
+                            <label>
+                                <span>{obj.label}</span>
+                                <input
+                                    type={obj.type}
+                                    placeholder={obj.placeholder}
+                                    value={formData[obj.name]}
+                                    onChange={handleChange}
+                                    name={obj.name}
+                                />
+                            </label>
+                            <br />
+                        </section>
+                    );
+
+                })}
+
             </form>
             <hr />
         </>
