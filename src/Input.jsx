@@ -1,31 +1,33 @@
 import React from "react";
 
-function Input({ schema, formData, setFormData }) {
-    const validate = (e, validation) => {
-        const { maxlen, minlen, maxval, minval } = validation;
+function Input({ schema, formData, setFormData, setFormValid }) {
+    const handleChange = (event, schema, formData, setFormData) => {
+        const validateInput = (event, schema) => {
+            if (event.target.type === "number") {
+                if (
+                    event.target.value < schema.validation.minval ||
+                    event.target.value > schema.validation.maxval
+                ) {
+                    console.log(
+                        `The number must be between ${schema.validation.minval} and ${schema.validation.maxval}`
+                    );
+                    return false;
+                }
+            }
+            if (event.target.type === "text") {
+                if (event.target.value.length > schema.validation.maxlen) {
+                    console.log(`No. of characters can't exceed ${schema.validation.maxlen}`);
+                    return false;
+                }
+            }
+            return true;
+        };
 
-        if (formData[e.target.name].length > maxlen) {
-            console.log(`Max characters allowed: ${maxlen}`);
-        }
-
-        if (formData[e.target.name].length < minlen) {
-            console.log(`Min characters allowed: ${minlen}`);
-        }
-
-        if (formData[e.target.name] < minval) {
-            console.log(`Min. age allowed: ${minval}`);
-        }
-
-        if (formData[e.target.name] > maxval) {
-            console.log(`Max age allowed: ${maxval}`);
-        }
-    };
-
-    const handleChange = (e, formData, setFormData) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+        if (validateInput(event, schema))
+            setFormData({
+                ...formData,
+                [event.target.name]: event.target.value,
+            });
     };
 
     if (schema.type === "select") {
@@ -57,12 +59,11 @@ function Input({ schema, formData, setFormData }) {
             type={schema.type}
             placeholder={schema.placeholder}
             value={formData[schema.name]}
+            name={schema.name}
             onChange={(e) => {
-                validate(e, schema.validation);
-                handleChange(e, formData, setFormData);
+                handleChange(e, schema, formData, setFormData);
             }}
             autoComplete="off"
-            name={schema.name}
         />
     );
 }

@@ -8,8 +8,8 @@ function App() {
         lname: "Carlsen",
         gender: "male",
         age: 32,
-        phoneNumber: "+977-98xxxxxxxx",
-        country: "Nepal",
+        country: "Norway",
+        address: "Tonsberg",
     });
 
     const schema = [
@@ -74,13 +74,13 @@ function App() {
         },
         {
             type: "text",
-            title: "Phone Number",
-            placeholder: "Phone Number",
-            label: "Enter your phone number",
-            name: "phoneNumber",
+            title: "Address",
+            placeholder: "Address",
+            label: "Enter your address",
+            name: "address",
             validation: {
-                maxlen: 20,
-                minval: 5,
+                maxlen: 30,
+                minlen: 5,
             },
         },
     ];
@@ -98,7 +98,14 @@ function App() {
                         </label>
                     );
                 })}
-                <button type="submit">Submit</button>
+                <button
+                    type="submit"
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    Submit
+                </button>
             </form>
             <hr />
 
