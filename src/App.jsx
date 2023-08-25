@@ -3,7 +3,9 @@ import "./App.css";
 import Input from "./Input";
 
 function App() {
+
     const [errorMessage, setErrorMessage] = useState("");
+
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
@@ -132,10 +134,13 @@ function App() {
                         </label>
                     );
                 })}
+
                 <button
                     type="submit"
                     onClick={(e) => {
                         e.preventDefault();
+                        if(isFormValid)
+                        alert('Form Submitted Successfully.')
                     }}
                     disabled={!isFormValid}
                 >

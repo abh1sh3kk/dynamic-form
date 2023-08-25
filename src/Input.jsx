@@ -1,10 +1,13 @@
 import React, { useRef } from "react";
 
 function Input({ schema, formData, setFormData, setIsFormValid }) {
+    
     const ref = useRef();
 
     const handleChange = (event, schema, formData, setFormData) => {
+
         const validateInput = (event, schema, setIsFormValid) => {
+
             const inputValue = event.target.value;
             const inputType = event.target.type;
 
@@ -40,11 +43,14 @@ function Input({ schema, formData, setFormData, setIsFormValid }) {
             setIsFormValid(true);
             return true;
         };
+
         validateInput(event, schema, setIsFormValid);
+
         setFormData({
             ...formData,
             [event.target.name]: event.target.value,
         });
+
     };
 
     if (schema.type === "select") {
