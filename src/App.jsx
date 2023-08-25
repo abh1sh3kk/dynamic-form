@@ -136,7 +136,7 @@ function App() {
                     type="submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        if (Object.keys(errors).length === 0)
+                        if (Object.keys(errors) == [])
                             alert("Form is submitted successfully.");
                     }}
                     disabled={Object.keys(errors).length !== 0}

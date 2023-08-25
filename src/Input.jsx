@@ -1,13 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 
 function Input({ schema, formData, setFormData, errors, setErrors }) {
-    const ref = useRef();
 
     const handleChange = (event, schema, formData, setFormData) => {
         const validateInput = (event, schema) => {
-            const displayErrorMsg = (ref, message) => {
-                ref.current.textContent = message;
-            };
 
             const popErrorFromList = (errors, setErrors, keyToRemove) => {
                 setErrors(() => {
@@ -17,69 +13,48 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
                 });
             };
 
-            const insertErrorToList = (errors, setErrors, name, message) => {
-                setErrors(() => ({
-                    ...errors,
-                    [name]: message,
-                }));
-            };
-
             const inputValue = event.target.value;
             const inputType = event.target.type;
 
             if (inputType === "text") {
                 if (inputValue.length > schema.validation.maxlen.value) {
-                    displayErrorMsg(ref, schema.validation.maxlen.message);
-                    insertErrorToList(
-                        errors,
-                        setErrors,
-                        event.target.name,
-                        schema.validation.maxlen.message
-                    );
+                    setErrors(() => ({
+                        ...errors,
+                        [event.target.name]: schema.validation.maxlen.message,
+                    }));
                     return false;
                 }
 
                 if (inputValue.length < schema.validation.minlen.value) {
-                    displayErrorMsg(ref, schema.validation.minlen.message);
-                    insertErrorToList(
-                        errors,
-                        setErrors,
-                        event.target.name,
-                        schema.validation.minlen.message
-                    );
+                    setErrors(() => ({
+                        ...errors,
+                        [event.target.name]: schema.validation.minlen.message,
+                    }));
                     return false;
                 }
                 popErrorFromList(errors, setErrors, event.target.name);
-                displayErrorMsg(ref, "");
             }
 
             if (inputType === "number") {
                 const { maxval, minval } = schema.validation;
 
                 if (inputValue < minval.value) {
-                    displayErrorMsg(ref, minval.message);
-                    insertErrorToList(
-                        errors,
-                        setErrors,
-                        event.target.name,
-                        schema.validation.minval.message
-                    );
+                    setErrors(() => ({
+                        ...errors,
+                        [event.target.name]: minval.message,
+                    }));
                     return false;
                 }
 
                 if (inputValue > maxval.value) {
-                    displayErrorMsg(ref, maxval.message);
-                    insertErrorToList(
-                        errors,
-                        setErrors,
-                        event.target.name,
-                        schema.validation.maxval.message
-                    );
+                    setErrors(() => ({
+                        ...errors,
+                        [event.target.name]: maxval.message,
+                    }));
                     return false;
                 }
 
                 popErrorFromList(errors, setErrors, event.target.name);
-                displayErrorMsg(ref, "");
             }
 
             return true;
@@ -129,7 +104,7 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
                 }}
                 autoComplete="off"
             />
-            <span className="error-msg" ref={ref}></span>
+            <span className="error-msg">{errors[schema.name]}</span>
         </>
     );
 }
