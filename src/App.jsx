@@ -4,8 +4,6 @@ import Input from "./Input";
 
 function App() {
 
-    const [errorMessage, setErrorMessage] = useState("");
-
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
@@ -15,7 +13,7 @@ function App() {
         address: "Tonsberg",
     });
 
-    const [isFormValid, setIsFormValid] = useState(true);
+    const [errors, setErrors] = useState({});
 
     const schema = [
         {
@@ -124,12 +122,11 @@ function App() {
                         <label key={index}>
                             <span>{obj.label}</span>
                             <Input
-                                formData={formData}
                                 schema={obj}
+                                formData={formData}
                                 setFormData={setFormData}
-                                errorMessage={errorMessage}
-                                setErrorMessage={setErrorMessage}
-                                setIsFormValid={setIsFormValid}
+                                errors={errors}
+                                setErrors={setErrors}
                             />
                         </label>
                     );
@@ -139,10 +136,10 @@ function App() {
                     type="submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        if(isFormValid)
-                        alert('Form Submitted Successfully.')
+                        if (Object.keys(errors).length === 0)
+                            alert("Form is submitted successfully.");
                     }}
-                    disabled={!isFormValid}
+                    disabled={Object.keys(errors).length !== 0}
                 >
                     Submit
                 </button>
