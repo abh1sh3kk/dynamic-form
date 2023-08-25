@@ -13,6 +13,8 @@ function App() {
         address: "Tonsberg",
     });
 
+    const [isFormValid, setIsFormValid] = useState(true);
+
     const schema = [
         {
             type: "text",
@@ -27,7 +29,7 @@ function App() {
                 },
                 minlen: {
                     value: 2,
-                    message: "First name must be of atleast 2 characters.",
+                    message: "First name must be of at least 2 characters.",
                 },
             },
         },
@@ -125,6 +127,7 @@ function App() {
                                 setFormData={setFormData}
                                 errorMessage={errorMessage}
                                 setErrorMessage={setErrorMessage}
+                                setIsFormValid={setIsFormValid}
                             />
                         </label>
                     );
@@ -134,6 +137,7 @@ function App() {
                     onClick={(e) => {
                         e.preventDefault();
                     }}
+                    disabled={!isFormValid}
                 >
                     Submit
                 </button>
