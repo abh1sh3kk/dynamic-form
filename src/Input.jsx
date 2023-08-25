@@ -1,25 +1,32 @@
-import React from "react";
+import React, { useRef } from "react";
 
-function Input({ schema, formData, setFormData, setFormValid }) {
+function Input({ schema, formData, setFormData }) {
+    const ref = useRef();
     const handleChange = (event, schema, formData, setFormData) => {
         const validateInput = (event, schema) => {
-            if (event.target.type === "number") {
-                if (
-                    event.target.value < schema.validation.minval ||
-                    event.target.value > schema.validation.maxval
-                ) {
-                    console.log(
-                        `The number must be between ${schema.validation.minval} and ${schema.validation.maxval}`
-                    );
+            const inputValue = event.target.value;
+            const inputType = event.target.type;
+
+            if (inputType === "text") {
+                if (inputValue.length > schema.validation.maxlen.value) {
+                    ref.current.textContent = schema.validation.maxlen.message;
                     return false;
                 }
             }
-            if (event.target.type === "text") {
-                if (event.target.value.length > schema.validation.maxlen) {
-                    console.log(`No. of characters can't exceed ${schema.validation.maxlen}`);
+
+            if (inputType === "number") {
+                const { maxval, minval } = schema.validation;
+
+                if (inputValue < minval.value) {
+                    ref.current.textContent = minval.message;
+                    return false;
+                } else if (inputValue > maxval.value) {
+                    ref.current.textContent = maxval.message;
                     return false;
                 }
             }
+
+            ref.current.textContent = "";
             return true;
         };
 
@@ -55,16 +62,19 @@ function Input({ schema, formData, setFormData, setFormValid }) {
     }
 
     return (
-        <input
-            type={schema.type}
-            placeholder={schema.placeholder}
-            value={formData[schema.name]}
-            name={schema.name}
-            onChange={(e) => {
-                handleChange(e, schema, formData, setFormData);
-            }}
-            autoComplete="off"
-        />
+        <>
+            <input
+                type={schema.type}
+                placeholder={schema.placeholder}
+                value={formData[schema.name]}
+                name={schema.name}
+                onChange={(e) => {
+                    handleChange(e, schema, formData, setFormData);
+                }}
+                autoComplete="off"
+            />
+            <span className="error-msg" ref={ref}></span>
+        </>
     );
 }
 

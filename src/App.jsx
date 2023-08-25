@@ -3,6 +3,7 @@ import "./App.css";
 import Input from "./Input";
 
 function App() {
+    const [errorMessage, setErrorMessage] = useState("");
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
@@ -20,8 +21,14 @@ function App() {
             label: "Enter your first name",
             name: "fname",
             validation: {
-                maxlen: 15,
-                minlen: 2,
+                maxlen: {
+                    value: 15,
+                    message: "First name can't be more than 15 characters.",
+                },
+                minlen: {
+                    value: 2,
+                    message: "First name must be of atleast 2 characters.",
+                },
             },
         },
         {
@@ -31,8 +38,14 @@ function App() {
             label: "Enter your last name",
             name: "lname",
             validation: {
-                maxlen: 10,
-                minlen: 3,
+                maxlen: {
+                    value: 10,
+                    message: "Last name can't be more than 10 characters.",
+                },
+                minlen: {
+                    value: 3,
+                    message: "Last name must be of atleast 3 characters.",
+                },
             },
         },
         {
@@ -68,8 +81,14 @@ function App() {
             label: "Enter your age",
             name: "age",
             validation: {
-                maxval: 50,
-                minval: 18,
+                maxval: {
+                    value: 50,
+                    message: "Age should be less than 50.",
+                },
+                minval: {
+                    value: 18,
+                    message: "Age should be more than 18.",
+                },
             },
         },
         {
@@ -79,8 +98,14 @@ function App() {
             label: "Enter your address",
             name: "address",
             validation: {
-                maxlen: 30,
-                minlen: 5,
+                maxlen: {
+                    value: 30,
+                    message: "Address can't be more than 30 charatcers.",
+                },
+                minlen: {
+                    value: 5,
+                    message: "Address must be of at least 5 characters.",
+                },
             },
         },
     ];
@@ -94,7 +119,13 @@ function App() {
                     return (
                         <label key={index}>
                             <span>{obj.label}</span>
-                            <Input formData={formData} schema={obj} setFormData={setFormData} />
+                            <Input
+                                formData={formData}
+                                schema={obj}
+                                setFormData={setFormData}
+                                errorMessage={errorMessage}
+                                setErrorMessage={setErrorMessage}
+                            />
                         </label>
                     );
                 })}
