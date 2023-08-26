@@ -111,9 +111,6 @@ function App() {
         },
     ];
 
-    console.log(errors);
-    console.log();
-
     return (
         <>
             <hr />
@@ -138,10 +135,10 @@ function App() {
                     type="submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        if (!Object.values(errors).every((item) => item === null))
+                        if (Object.values(errors).every((item) => item === null))
                             alert("Form is submitted successfully.");
                     }}
-                    disabled={Object.values(errors).every((item) => item === null)}
+                    disabled={!Object.values(errors).every((item) => item === null)}
                 >
                     Submit
                 </button>

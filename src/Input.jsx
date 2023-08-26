@@ -1,72 +1,52 @@
 import React from "react";
 
 function Input({ schema, formData, setFormData, errors, setErrors }) {
+    const findError = (event, schema, errors, setErrors) => {
+        const inputValue = event.target.value;
+        const inputType = event.target.type;
+        const validation = schema.validation;
+
+        if (inputType === "text") {
+            if (inputValue.length > validation.maxlen.value) {
+                return validation.maxlen.message;
+            }
+
+            if (inputValue.length < validation.minlen.value) {
+                return validation.minlen.message;
+            }
+            return null;
+        }
+
+        if (inputType === "number") {
+            const { maxval, minval } = validation;
+
+            if (inputValue < minval.value) {
+                return minval.message;
+            }
+
+            if (inputValue > maxval.value) {
+                return maxval.message;
+            }
+
+            return null;
+        }
+
+        return null;
+    };
 
     const handleChange = (event, schema, formData, setFormData) => {
-        const validateInput = (event, schema) => {
+        const errorInfo = findError(event, schema, errors, setErrors);
 
-            const inputValue = event.target.value;
-            const inputType = event.target.type;
-
-            if (inputType === "text") {
-                if (inputValue.length > schema.validation.maxlen.value) {
-                    setErrors(() => ({
-                        ...errors,
-                        [event.target.name]: schema.validation.maxlen.message,
-                    }));
-                    return false;
-                }
-
-                if (inputValue.length < schema.validation.minlen.value) {
-                    setErrors(() => ({
-                        ...errors,
-                        [event.target.name]: schema.validation.minlen.message,
-                    }));
-                    return false;
-                }
-                setErrors(()=> ({
-                    ...errors,
-                    [event.target.name]: null
-                }));
-            }
-
-            if (inputType === "number") {
-                const { maxval, minval } = schema.validation;
-
-                if (inputValue < minval.value) {
-                    setErrors(() => ({
-                        ...errors,
-                        [event.target.name]: minval.message,
-                    }));
-                    return false;
-                }
-
-                if (inputValue > maxval.value) {
-                    setErrors(() => ({
-                        ...errors,
-                        [event.target.name]: maxval.message,
-                    }));
-                    return false;
-                }
-
-                setErrors(()=> ({
-                    ...errors,
-                    [event.target.name]: null
-                }));
-            }
-
-            return true;
-        };
-
-        validateInput(event, schema);
+        setErrors(() => ({
+            ...errors,
+            [event.target.name]: errorInfo,
+        }));
 
         setFormData({
             ...formData,
             [event.target.name]: event.target.value,
         });
     };
-
-
 
     if (schema.type === "select") {
         return (
