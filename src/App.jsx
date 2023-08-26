@@ -3,7 +3,6 @@ import "./App.css";
 import Input from "./Input";
 
 function App() {
-
     const [formData, setFormData] = useState({
         fname: "Magnus",
         lname: "Carlsen",
@@ -112,6 +111,9 @@ function App() {
         },
     ];
 
+    console.log(errors);
+    console.log();
+
     return (
         <>
             <hr />
@@ -136,10 +138,10 @@ function App() {
                     type="submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        if (Object.keys(errors) == [])
+                        if (!Object.values(errors).every((item) => item === null))
                             alert("Form is submitted successfully.");
                     }}
-                    disabled={Object.keys(errors).length !== 0}
+                    disabled={Object.values(errors).every((item) => item === null)}
                 >
                     Submit
                 </button>

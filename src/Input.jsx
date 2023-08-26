@@ -5,14 +5,6 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
     const handleChange = (event, schema, formData, setFormData) => {
         const validateInput = (event, schema) => {
 
-            const popErrorFromList = (errors, setErrors, keyToRemove) => {
-                setErrors(() => {
-                    const newErrors = errors;
-                    delete newErrors[keyToRemove];
-                    return newErrors;
-                });
-            };
-
             const inputValue = event.target.value;
             const inputType = event.target.type;
 
@@ -32,7 +24,10 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
                     }));
                     return false;
                 }
-                popErrorFromList(errors, setErrors, event.target.name);
+                setErrors(()=> ({
+                    ...errors,
+                    [event.target.name]: null
+                }));
             }
 
             if (inputType === "number") {
@@ -54,7 +49,10 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
                     return false;
                 }
 
-                popErrorFromList(errors, setErrors, event.target.name);
+                setErrors(()=> ({
+                    ...errors,
+                    [event.target.name]: null
+                }));
             }
 
             return true;
@@ -67,6 +65,8 @@ function Input({ schema, formData, setFormData, errors, setErrors }) {
             [event.target.name]: event.target.value,
         });
     };
+
+
 
     if (schema.type === "select") {
         return (
