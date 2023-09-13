@@ -1,6 +1,9 @@
 import { useState } from "react";
+
 import "./App.css";
-import Input from "./Input";
+import Preview from "./components/Preview";
+import Form from "./components/Form";
+import FormEditor from "./components/FormEditor";
 
 function App() {
     const [formData, setFormData] = useState({
@@ -12,9 +15,7 @@ function App() {
         address: "Tonsberg",
     });
 
-    const [errors, setErrors] = useState({});
-
-    const schema = [
+    const [schema, setSchema] = useState([
         {
             type: "text",
             title: "First Name",
@@ -109,49 +110,22 @@ function App() {
                 },
             },
         },
-    ];
+    ]);
+
+    const [errors, setErrors] = useState({});
+
+    const handleChangeTemp = () => {
+    }
 
     return (
         <>
             <hr />
-
-            <form>
-                {schema.map((obj, index) => {
-                    return (
-                        <label key={index}>
-                            <span>{obj.label}</span>
-                            <Input
-                                schema={obj}
-                                formData={formData}
-                                setFormData={setFormData}
-                                errors={errors}
-                                setErrors={setErrors}
-                            />
-                        </label>
-                    );
-                })}
-
-                <button
-                    type="submit"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        if (Object.values(errors).every((item) => item === null))
-                            alert("Form is submitted successfully.");
-                    }}
-                    disabled={!Object.values(errors).every((item) => item === null)}
-                >
-                    Submit
-                </button>
-            </form>
+                <Form schema={schema} formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
             <hr />
 
-            {schema.map((obj, index) => {
-                return (
-                    <p key={index}>
-                        <span className="title">{obj.title}:</span> {formData[obj.name]}
-                    </p>
-                );
-            })}
+            {/* <Preview schema={schema} formData={formData} /> */}
+
+            <FormEditor schema={schema} setSchema={setSchema} />
         </>
     );
 }
