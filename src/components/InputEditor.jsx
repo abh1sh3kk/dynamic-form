@@ -7,7 +7,9 @@ function InputEditor({ inputField, setSchema }) {
 
     return (
         <>
-            <form>
+            <form onSubmit={(e)=> {
+                e.preventDefault();
+            }}>
                 <label>
                     Type:
                     <select

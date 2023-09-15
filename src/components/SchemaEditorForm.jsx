@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 function SchemaEditorForm({ type, inputField, setSchema }) {
-    const repeatedJSX = (
+    const [inputOption, setInputOption] = useState("");
+
+    const commonProperties = (
         <>
             <label>
                 Name:
@@ -56,26 +58,13 @@ function SchemaEditorForm({ type, inputField, setSchema }) {
         </>
     );
     if (type === "text") {
-        return <>{repeatedJSX}</>;
+        return <>{commonProperties}</>;
     }
 
     if (type === "number") {
         return (
             <>
-                <label>
-                    Placeholder:
-                    <input type="text" />
-                </label>
-                <label>
-                    Label:
-                    <input type="text" />
-                </label>
-
-                <label>
-                    Name:
-                    <input type="text" />
-                </label>
-
+                {commonProperties}
                 <label>
                     Max Value
                     <input type="number" placeholder="Maximum value" />
@@ -94,22 +83,63 @@ function SchemaEditorForm({ type, inputField, setSchema }) {
     if (type === "select") {
         return (
             <>
+                {commonProperties}
                 <label>
-                    Placeholder:
-                    <input type="text" />
-                </label>
-                <label>
-                    Label:
-                    <input type="text" />
-                </label>
+                    Options List:
+                    <input
+                        type="text"
+                        placeholder="Enter an option"
+                        value={inputOption}
+                        onChange={(e) => setInputOption(e.target.value)}
+                    />
+                    <button
+                        onClick={(e) => {
+                            setSchema((oldSchema) => {
+                                let newSchema = oldSchema.map((schemaValue) => {
+                                    if (schemaValue.name === inputField.name) {
+                                        if (!schemaValue.list.includes(inputOption))
+                                            return {
+                                                ...schemaValue,
+                                                list: [...schemaValue.list, inputOption],
+                                            };
+                                        else console.log("Options can't be duplicated.");
+                                    }
+                                    return { ...schemaValue };
+                                });
 
-                <label>
-                    Name:
-                    <input type="text" />
+                                return newSchema;
+                            });
+                        }}
+                    >
+                        Add
+                    </button>
                 </label>
-                <label>
-                    List of inputs: <input type="text" />
-                </label>
+                {inputField.list.map((listOption, index) => {
+                    return (
+                        <div key={index}>
+                            <button
+                                data-index={index}
+                                onClick={(e) => {
+                                    setSchema((oldSchema) => {
+                                        let newSchema = oldSchema.map((schemaValue) => {
+                                            if (schemaValue.name === inputField.name) {
+                                                let newList = [...schemaValue.list];
+                                                newList.splice(index, 1);
+                                                return { ...schemaValue, list: newList };
+                                            }
+                                            return schemaValue;
+                                        });
+
+                                        return newSchema;
+                                    });
+                                }}
+                            >
+                                x
+                            </button>{" "}
+                            {listOption}
+                        </div>
+                    );
+                })}
             </>
         );
     }
